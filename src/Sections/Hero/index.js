@@ -85,7 +85,7 @@ display: flex;
 flex-direction: column;
 align-items: flex-start;
 width: 50%;
-line-heigth: 1.5;
+line-height: 1.5;
 @media only Screen and (max-width: 48em) {
   width: 80%;
   text-align: center;
@@ -134,7 +134,6 @@ justify-content: center;
 align-items: center;
 transition: all 0.2s;
 
-
 &:hover{
   transform: scale(1.1);  
 }
@@ -168,7 +167,7 @@ animation: ${move} 2.5s ease infinite;
 
 const HeroSection = () => {
   return (
-  <Herosection>
+  <Herosection id="home">
     <Blobs>
       <PinkBlob>
           <img src={Pink} alt="Pink Blob" width="400" height="400"></img>
@@ -185,10 +184,10 @@ const HeroSection = () => {
         <Topic>
           <Circle /><span>We Build things</span>
         </Topic>
-        <Title>Transforming your digital presence</Title>
+        <Title>Transforming your digital presence - Tutorial by CodeBucks </Title>
         <SubText>
           {" "}
-          we help fast growing companies build award winning websites
+          React Website🤩 : Build Responsive website with ReactJS, Styled-Components & GSAP❣️
           </SubText>
         <CTA>
           get in touch &nbsp; {" "}

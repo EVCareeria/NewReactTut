@@ -1,7 +1,9 @@
 // This is Header component /Navigation Component
 import logo from '../../assets/logo.svg';
 import styled from 'styled-components';
-import React, {useState} from 'react';
+import React, {useRef, useState,useEffect} from 'react';
+import gsap from 'gsap';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 
   const Headers = styled.div `
   display:flex;
@@ -12,6 +14,13 @@ import React, {useState} from 'react';
   color:var(--white);
   position:relative;
   z-index: 500;
+
+  @media only Screen and (max-width:64em){
+    padding: 0.5rem 3rem;
+  }
+  @media only Screen and (max-width:40em){
+    padding: 0.5rem 1.5rem;
+  }
   `;
 
   const Logo = styled.a `
@@ -146,32 +155,85 @@ const Header = () => {
   
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
+
+  const ref = useRef(null);
+  gsap.registerPlugin(ScrollTrigger);
+
+  useEffect(() =>{
+    const element = ref.current;
+    const mq = window.matchMedia("(max-width:40em)");
+
+    if(mq.matches){
+      gsap.to(element, {
+        position: "fixed",
+        top:"0",
+        left:"0",
+        right:"0",
+        padding:"1rem 2.5rem",
+        borderRadius:"0 0 50px 50px",
+        border:"2px solid var(--white)",
+
+        duration:1,
+        ease:"power1.out",
+
+        scrollTrigger:{
+          trigger:element,
+          start:"bottom+=200 top",
+          end:"+=100",
+          scrub:true,
+        }
+      });
+    } else{
+      gsap.to(element, {
+        position: "fixed",
+        top:"1rem",
+        left:"3rem",
+        right:"3rem",
+        padding:"1.5rem 2rem",
+        borderRadius:"50px",
+        border:"3px solid var(--white)",
+        duration:1,
+        ease:"power1.out",
+        scrollTrigger:{
+          trigger:element,
+          start:"bottom+=300 top",
+          end:"+=250",
+          scrub:true,
+        }
+      });
+    }
+
+    
+  },[])
   
-  return <Headers>
-    <Logo>
-      <img src={logo} alt="CodeBucks" />
-      <h3>CodeBucks</h3>
-    </Logo>
-    <Nav>
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#contact">
-        <Button>Contact Us</Button>
-      </a>
-    </Nav>
-    <HamburgerBtn onClick={() => handleClick()} clicked={click}>
-      <span />
-    </HamburgerBtn>
-    <MobileMenu clicked={click}>
-      <a href="#home" onClick={() => handleClick()} >Home</a>
-      <a href="#about" onClick={() => handleClick()} >About</a>
-      <a href="#services" onClick={() => handleClick()} >Services</a>
-      <a href="#contact" onClick={() => handleClick()} >
-        <Button>Contact Us</Button>
-      </a>
-    </MobileMenu>
-  </Headers>;
+  return(
+    <Headers ref={ref}>
+      <Logo>
+        <img src={logo} alt="CodeBucks" />
+        <h3>CodeBucks</h3>
+      </Logo>
+      <Nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">
+          <Button>Contact Us</Button>
+        </a>
+      </Nav>
+      <HamburgerBtn onClick={() => handleClick()} clicked={click}>
+        <span />
+      </HamburgerBtn>
+      <MobileMenu clicked={click}>
+        <a href="#home" onClick={() => handleClick()} >Home</a>
+        <a href="#about" onClick={() => handleClick()} >About</a>
+        <a href="#services" onClick={() => handleClick()} >Services</a>
+        <a href="#contact" onClick={() => handleClick()} >
+          <Button>Contact Us</Button>
+        </a>
+      </MobileMenu>
+    </Headers>
+  );
+   
 };
 
 export default Header;

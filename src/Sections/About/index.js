@@ -10,7 +10,7 @@ const move = keyframes`
 0% {transform:translateY(-5px)}
 50% {transform:translateY(10px) translateX(10px)}
 100% {transform:translateY(-5px)}
-`
+`;
 
 const AboutSection = styled.div`
 width: 100vw;
@@ -56,7 +56,7 @@ font-size: 2rem;
 `;
 const CurvedLine = styled.div`
 width:7rem;
-heigth:2rem;
+height:2rem;
 border:5px solid var(--purple);
 border-color:var(--purple) transparent transparent transparent;
 border-radius: 150%/60px 70px 0 0;
@@ -117,7 +117,7 @@ margin-top: 1rem;
 
 const About = () => {
   return (
-    <AboutSection>
+    <AboutSection id="about">
       <Waves src={wave} alt="Waves" width="400" height="400" />
       <Hand>
         <img src={hand} alt="hand" width="400" height="400" /> 

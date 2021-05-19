@@ -39,7 +39,7 @@ position:relative;
 
 &::before{
   content:"";
-  heigth: 1px;
+  height: 1px;
   width:50%;
   position:absolute;
   left:50%;
@@ -71,7 +71,10 @@ justify-content:space-between;
 position:relative;
 
 @media only Screen and (max-width: 48em){
-  opacity:0.5;
+  display:block;
+    &:last-child{
+      margin-bottom:2rem;
+    }
   }
 `;
 
@@ -92,7 +95,7 @@ opacity:0.5;
 
 const Services = () => {
   return (
-    <ServiceSection>
+    <ServiceSection id="services">
     <Background>
       <Title>What we do</Title>
       <Line/>
