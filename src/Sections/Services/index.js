@@ -1,10 +1,13 @@
 // This is Services component
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import SvgBlock from '../../components/SvgBlock';
 import TextBlock from '../../components/TextBlock';
 import Tube from '../../assets/3dtube.png'
 import Cone from '../../assets/3dtriangle.png'
 import Capsule from '../../assets/3dcapsule.png'
+import gsap from 'gsap';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 
 const ServiceSection = styled.div`
 width:100vw;
@@ -26,7 +29,7 @@ top:0;
 left:0;
 bottom:0;
 width:100vw;
-height:100%;
+height:85vh;
 background-color:var(--black);
 background-size: auto 100vh;
 z-index: -1;
@@ -65,7 +68,8 @@ border-top: 2rem solid var(--background);
 
 const Content = styled.div`
 display:flex;
-margin: 3rem 10rem;
+margin: 10rem 10rem;
+/* margin: 3rem 10rem; */
 align-items:center;
 justify-content:space-between;
 position:relative;
@@ -74,6 +78,12 @@ position:relative;
   display:block;
     &:last-child{
       margin-bottom:2rem;
+    }
+  }
+  @media only Screen and (max-width: 40em){
+    margin: 10rem calc(2rem + 3vw);
+    &:last-child{
+      margin-bottom: 1rem;
     }
   }
 `;
@@ -94,15 +104,178 @@ opacity:0.5;
 
 
 const Services = () => {
+  const ref = useRef(null);
+  const revealRefs = useRef([]);
+  revealRefs.current = [];
+  gsap.registerPlugin(ScrollTrigger);
+  
+
+  const addToRefs = (el) =>{
+    if(el && !revealRefs.current.includes(el)){
+      revealRefs.current.push(el);
+    }
+/*     console.log("reveal refs",revealRefs.current); */
+  }
+  
+  useEffect(()=>{
+    const element = ref.current;
+    const line = document.getElementById("line");
+    const mq = window.matchMedia("(max-width:40em)");
+
+    const t1 = gsap.timeline({
+      scrollTrigger:{
+        trigger:document.getElementById("services"),
+        start:"top top+=180",
+        end:"bottom bottom",
+        pin:element,
+        pinReparent:true,
+        /* markers:true, */
+      }
+    });
+    
+    t1.fromTo(
+      document.getElementById("line"), {
+        height:"15rem",
+      }, {
+        height: "3rem",
+        duration:2,
+        scrollTrigger: {
+          trigger:line,
+          start:"top top+=200",
+          end:"bottom top+=220",
+          scrub:true,
+        }
+      }
+    )
+
+    revealRefs.current.forEach((el,index) =>{
+      if(mq.matches) {
+        t1.from(el.childNodes[0],
+          {
+            x:-300,
+            opacity: 0,
+            duration:2,
+            ease:"power2",
+
+            scrollTrigger:{
+              trigger:el,
+              id:`section-${index +1}`,
+              start:"top center+=200",
+              end:"bottom bottom-=100",
+              scrub:true,
+              snap:true,
+            },
+          }).to(el.childNodes[1],
+            {
+              transform: "scale(0)",
+              duration:2,
+              ease:"power2.inOut",
+  
+              scrollTrigger:{
+                trigger:el.childNodes[1],
+                id:`section-${index +1}`,
+                start:"top center",
+                end:"bottom center",
+                scrub:true,
+                snap:true,
+              }
+            }).from(el.childNodes[2],{
+                y:400,
+                duration:2,
+                ease:"power2",
+    
+                scrollTrigger:{
+                  trigger:el,
+                  id:`section-${index +1}`,
+                  start:"top center+=100",
+                  end:"bottom center-=200",
+                  scrub:true,
+                  snap:true,
+                }
+              }).to(el,{
+                opacity: 0,
+                ease:"power2",
+    
+                scrollTrigger:{
+                  trigger:el,
+                  id:`section-${index +1}`,
+                  start:"top top+=300",
+                  end:"center top+=300",
+                  scrub:true,
+                  snap:true,
+                }
+              });
+        
+      } else{
+        t1.from(el.childNodes[0],
+          {
+            x:-300,
+            opacity: 0,
+            duration:2,
+            ease:"power2",
+
+            scrollTrigger:{
+              trigger:el,
+              id:`section-${index +1}`,
+              start:"top center+=100",
+              end:"bottom bottom-=200",
+              scrub:true,
+              snap:true,
+            },
+          }).to(el.childNodes[1],
+            {
+              transform: "scale(0)",
+              duration:2,
+              ease:"power2.inOut",
+  
+              scrollTrigger:{
+                trigger:el.childNodes[1],
+                id:`section-${index +1}`,
+                start:"top center",
+                end:"bottom center",
+                scrub:true,
+                snap:true,
+              }
+            }).from(el.childNodes[2],{
+                y:400,
+                duration:2,
+                ease:"power2",
+    
+                scrollTrigger:{
+                  trigger:el,
+                  id:`section-${index +1}`,
+                  start:"top center+=100",
+                  end:"bottom center-=200",
+                  scrub:true,
+                  snap:true,
+                }
+              }).to(el,{
+                opacity: 0,
+                ease:"power2",
+    
+                scrollTrigger:{
+                  trigger:el,
+                  id:`section-${index +1}`,
+                  start:"top top+=200",
+                  end:"center top+=100",
+                  scrub:true,
+                  snap:true,
+                }
+              });
+        }
+      })
+        
+  },[]);
+  
   return (
     <ServiceSection id="services">
-    <Background>
+    <Background ref={ref}>
       <Title>What we do</Title>
-      <Line/>
-      <Triangle/>
+      <Line id="line"/>
+      <Triangle />
     </Background>
 
-    <Content>
+    <Content ref={addToRefs}>
       <TextBlock
       topic="Design"
       title="We build award winning Designs"
@@ -113,7 +286,7 @@ const Services = () => {
       </OBJ>
       <SvgBlock svg="Design.svg" />
     </Content>
-    <Content>
+    <Content ref={addToRefs}>
       <TextBlock
       topic="Develope"
       title="We develope high quality web & app"

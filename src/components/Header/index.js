@@ -79,7 +79,7 @@ import {ScrollTrigger} from 'gsap/ScrollTrigger';
   &:hover{
     transform: scale(1.1);
   }
-  &:focus{
+  &:active{
     transform: scale(0.9);
   }
   `
@@ -119,7 +119,11 @@ import {ScrollTrigger} from 'gsap/ScrollTrigger';
   `
 
   const MobileMenu = styled.div`
-    display:flex;
+    display:none;
+    @media only Screen and (max-width: 48em) {
+        display: flex; 
+      }
+    
     flex-direction: column;
     align-items:center;
     justify-content: center;
@@ -151,13 +155,25 @@ import {ScrollTrigger} from 'gsap/ScrollTrigger';
 
 
 const Header = () => {
-
-  
   const [click, setClick] = useState(false);
-  const handleClick = () => setClick(!click);
+  
 
   const ref = useRef(null);
   gsap.registerPlugin(ScrollTrigger);
+
+    const ScrollUp = (id,e) => {
+      e.preventDefault();
+      const element = document.getElementById(id);
+      element.scrollIntoView({
+        behavior: "smooth",
+        block:"end",
+        inline:"nearest"
+      });
+    };
+    const handleClick = (id,e) => {
+      setClick(!click);
+      ScrollUp(id,e); 
+    };
 
   useEffect(() =>{
     const element = ref.current;
@@ -213,21 +229,21 @@ const Header = () => {
         <h3>CodeBucks</h3>
       </Logo>
       <Nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">
+        <a href="#home" onClick={(e)=>handleClick("home",e)}>Home</a>
+        <a href="#about" onClick={(e)=>handleClick("about",e)}>About</a>
+        <a href="#services"onClick={(e)=>handleClick("services",e)}>Services</a>
+        <a href="#contact" onClick={(e)=>handleClick("contact",e)}>
           <Button>Contact Us</Button>
         </a>
       </Nav>
-      <HamburgerBtn onClick={() => handleClick()} clicked={click}>
+      <HamburgerBtn onClick={() => setClick(!click)} clicked={click}>
         <span />
       </HamburgerBtn>
       <MobileMenu clicked={click}>
-        <a href="#home" onClick={() => handleClick()} >Home</a>
-        <a href="#about" onClick={() => handleClick()} >About</a>
-        <a href="#services" onClick={() => handleClick()} >Services</a>
-        <a href="#contact" onClick={() => handleClick()} >
+        <a href="#home" onClick={(e)=>handleClick("home",e)}>Home</a>
+        <a href="#about" onClick={(e)=>handleClick("about",e)}>About</a>
+        <a href="#services"onClick={(e)=>handleClick("services",e)}>Services</a>
+        <a href="#contact" onClick={(e)=>handleClick("contact",e)}>
           <Button>Contact Us</Button>
         </a>
       </MobileMenu>
